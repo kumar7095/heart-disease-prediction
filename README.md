@@ -88,8 +88,8 @@ http://127.0.0.1:5000/
 
 ## 🧑‍💻 Author
 
-- **Your Name**  
-- [GitHub Profile](https://github.com/YOUR_USERNAME)
+- **Talari Kumar Swamy**  
+- [GitHub Profile](https://github.com/kumar7095)
 
 ---
 
