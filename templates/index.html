@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Heart Disease Predictor</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f8f8;
+      padding: 20px;
+      max-width: 700px;
+      margin: auto;
+    }
+    h2 {
+      text-align: center;
+      color: #d9534f;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      margin-top: 10px;
+    }
+    input, select {
+      padding: 8px;
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px;
+      background: #d9534f;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Heart Disease Prediction</h2>
+  <form id="predictForm">
+    <label>Age:</label>
+    <input type="number" id="age" required>
+
+    <label>Sex:</label>
+    <select id="sex" required>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+    </select>
+
+    <label>Chest Pain Type:</label>
+    <select id="chest_pain_type" required>
+      <option value="Typical angina">Typical angina</option>
+      <option value="Atypical angina">Atypical angina</option>
+      <option value="Non-anginal pain">Non-anginal pain</option>
+      <option value="Asymptomatic">Asymptomatic</option>
+    </select>
+
+    <label>Resting Blood Pressure:</label>
+    <input type="number" id="resting_blood_pressure" required>
+
+    <label>Cholesterol:</label>
+    <input type="number" id="cholestoral" required>
+
+    <label>Fasting Blood Sugar:</label>
+    <select id="fasting_blood_sugar" required>
+      <option value="Lower than 120 mg/ml">Lower than 120 mg/ml</option>
+      <option value="Greater than 120 mg/ml">Greater than 120 mg/ml</option>
+    </select>
+
+    <label>Rest ECG:</label>
+    <select id="rest_ecg" required>
+      <option value="Normal">Normal</option>
+      <option value="ST-T wave abnormality">ST-T wave abnormality</option>
+      <option value="Left ventricular hypertrophy">Left ventricular hypertrophy</option>
+    </select>
+
+    <label>Max Heart Rate:</label>
+    <input type="number" id="Max_heart_rate" required>
+
+    <label>Exercise Induced Angina:</label>
+    <select id="exercise_induced_angina" required>
+      <option value="Yes">Yes</option>
+      <option value="No">No</option>
+    </select>
+
+    <label>Oldpeak:</label>
+    <input type="number" step="0.1" id="oldpeak" required>
+
+    <label>Slope:</label>
+    <select id="slope" required>
+      <option value="Upsloping">Upsloping</option>
+      <option value="Flat">Flat</option>
+      <option value="Downsloping">Downsloping</option>
+    </select>
+
+    <label>Vessels Colored by Fluoroscopy:</label>
+    <select id="vessels_colored_by_flourosopy" required>
+      <option value="Zero">Zero</option>
+      <option value="One">One</option>
+      <option value="Two">Two</option>
+      <option value="Three">Three</option>
+    </select>
+
+    <label>Thalassemia:</label>
+    <select id="thalassemia" required>
+      <option value="Normal">Normal</option>
+      <option value="Fixed Defect">Fixed Defect</option>
+      <option value="Reversable Defect">Reversable Defect</option>
+    </select>
+
+    <button type="submit">Predict</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    document.getElementById("predictForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const formData = {
+        age: parseInt(document.getElementById("age").value),
+        sex: document.getElementById("sex").value,
+        chest_pain_type: document.getElementById("chest_pain_type").value,
+        resting_blood_pressure: parseInt(document.getElementById("resting_blood_pressure").value),
+        cholestoral: parseInt(document.getElementById("cholestoral").value),
+        fasting_blood_sugar: document.getElementById("fasting_blood_sugar").value,
+        rest_ecg: document.getElementById("rest_ecg").value,
+        Max_heart_rate: parseInt(document.getElementById("Max_heart_rate").value),
+        exercise_induced_angina: document.getElementById("exercise_induced_angina").value,
+        oldpeak: parseFloat(document.getElementById("oldpeak").value),
+        slope: document.getElementById("slope").value,
+        vessels_colored_by_flourosopy: document.getElementById("vessels_colored_by_flourosopy").value,
+        thalassemia: document.getElementById("thalassemia").value
+      };
+
+      fetch("http://127.0.0.1:5000/predict", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+      })
+      .then(response => response.json())
+      .then(data => {
+        const result = data.prediction === 1 ? "⚠️ High Risk of Heart Disease" : "✅ Low Risk";
+        document.getElementById("result").textContent = result;
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        document.getElementById("result").textContent = "Error predicting result";
+      });
+    });
+  </script>
+
+</body>
+</html>
